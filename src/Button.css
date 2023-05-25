@@ -1,0 +1,36 @@
+.btn {
+    padding: 10px 15px;
+    margin: 10px 5px;
+    border: 0.5px solid;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn:active {
+    transform: scale(0.8);
+}
+
+/* pre-defined style */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #00264e;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #343a40;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #005c1e;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #67000d;
+    color: white;
+}
