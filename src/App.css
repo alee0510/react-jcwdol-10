@@ -1,0 +1,11 @@
+/* @global style */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container-app {
+    background-color: beige;
+    height: 100vh;
+}

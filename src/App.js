@@ -1,14 +1,16 @@
 import { Routes, Route } from "react-router-dom"
-import Button, { SecondaryButton, PrimaryButton } from "./Button";
+import HomePage from "./pages/home"
+import AboutPage from "./pages/about"
+import NotFoundPage from "./pages/not-found"
 
+import "./App.css"
 function App() {
 	return (
-		<div className="App">
-			<Button title="Universal Button" variant="success"/>
+		<div className="container-app">
 			<Routes>
-				<Route path="/" element={<Button title="My Custom Button" variant="danger"/>}/>
-				<Route path="/secondary" element={<SecondaryButton title="My Custom Button" color="red"/>}/>
-				<Route path="/primary" element={<PrimaryButton title="My Custom Button"/>}/>
+				<Route path="/" element={<HomePage />} />
+				<Route path="/about" element={<AboutPage />} />
+				<Route path="*" element={<NotFoundPage />} />
 			</Routes>
 		</div>
 	);
