@@ -1,5 +1,6 @@
 import { useState, useRef } from "react"
 import Alert from "../../components/alert"
+import Confirmation from "../../components/confirmation"
 
 const USERS = [
     {
@@ -87,33 +88,102 @@ const USERS = [
 function HomePage () {
     const [users, setUsers] = useState(USERS)
     const [alert, setAlert] = useState({ show : false, message : "" })
-    const name = useRef("")
-    const address = useRef("")
-    const birthdate = useRef("")
-    const gender = useRef("")
-    const skills = useRef("")
+    const [id, setId] = useState(null)
+    const [confirmation, setConfirmation] = useState({ show : false, message : "" })
+
+    // @input add new user's data
+    const name = useRef(null)
+    const address = useRef(null)
+    const birthdate = useRef(null)
+    const gender = useRef(null)
+    const skills = useRef(null)
+
+    // @input edit user's data
+    const editName = useRef(null)
+    const editAddress = useRef(null)
+    const editBirthdate = useRef(null)
+    const editGender = useRef(null)
+    const editSkills = useRef(null)
 
 
     // @convert user's data into table component
     const RenderTableRows = () => users.map((user, index) => {
-        return (
-            <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
-                <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
-                <td className="border border-slate-300 px-2 py-2">{user.name}</td>
-                <td className="border border-slate-300 px-2 py-2">{user.gender}</td>
-                <td className="border border-slate-300 text-center py-2">{user.birthdate}</td>
-                <td className="border border-slate-300 px-2 py-2">{user.address}</td>
-                <td className="border border-slate-300 px-2 py-2">{user.skills.join(", ")}</td>
-                <td className="border border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
-                    <button className="py-2 rounded text-white bg-amber-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200">
-                        edit
-                    </button>
-                    <button className="py-2 rounded text-white bg-red-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200">
-                        delete
-                    </button>
-                </td>
-            </tr>
-        )
+        if (id === user.id) {
+            return (
+                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
+                    <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
+                    <td className="border border-slate-300 px-2 py-2">
+                        <input type="text" ref={editName} defaultValue={user.name}
+                            className="border border-slate-300 px-4 py-2 rounded-md w-full" 
+                            placeholder="user's name"
+                        />
+                    </td>
+                    <td className="border border-slate-300 px-2 py-2">
+                        <select ref={editGender}
+                            className="border border-slate-300 px-2 py-2 rounded-md w-full"
+                        >
+                            <option selected={user.gender === "Male"}>male</option>
+                            <option selected={user.gender === "Female"}>female</option>
+                        </select>
+                    </td>
+                    <td className="border border-slate-300 text-center py-2">
+                        <input type="date" ref={editBirthdate} defaultValue={user.birthdate}
+                            className="border border-slate-300 px-4 py-2 rounded-md w-full"
+                            placeholder="birthdate"
+                        />
+                    </td>
+                    <td className="border border-slate-300 px-2 py-2">
+                        <input type="text" ref={editAddress} defaultValue={user.address}
+                            className="border border-slate-300 px-4 py-2 rounded-md w-full"
+                            placeholder="address"
+                        />
+                    </td>
+                    <td className="border border-slate-300 px-2 py-2">
+                        <input type="text" ref={editSkills} defaultValue={user.skills.join(", ")}
+                            className="border border-slate-300 px-4 py-2 rounded-md w-full"
+                            placeholder="skills"
+                        />
+                    </td>
+                    <td className="border border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
+                        <button className="py-1 rounded text-white bg-sky-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
+                            onClick={() => setId(null)}
+                        >
+                            cancel
+                        </button>
+                        <button className="py-1 rounded text-white bg-green-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
+                        >
+                            save
+                        </button>
+                    </td>
+                </tr>
+            )
+        } else {
+            return (
+                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
+                    <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
+                    <td className="border border-slate-300 px-2 py-2">{user.name}</td>
+                    <td className="border border-slate-300 px-2 py-2">{user.gender}</td>
+                    <td className="border border-slate-300 text-center py-2">{user.birthdate}</td>
+                    <td className="border border-slate-300 px-2 py-2">{user.address}</td>
+                    <td className="border border-slate-300 px-2 py-2">{user.skills.join(", ")}</td>
+                    <td className="border border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
+                        <button className="py-1 rounded text-white bg-amber-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
+                            onClick={() => setId(user.id)}
+                        >
+                            edit
+                        </button>
+                        <button className="py-1 rounded text-white bg-red-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
+                            onClick={() => {
+                                setId(user.id)
+                                setConfirmation({ show : true, message : `Are you sure you want to delete ${user.name}?` })
+                            }}
+                        >
+                            delete
+                        </button>
+                    </td>
+                </tr>
+            )
+        }
     })
 
     const onButtonAdd = () => {
@@ -165,14 +235,47 @@ function HomePage () {
         skills.current.value = ""
     }
 
+    const onButtonDelete = (id) => {
+        // let tempUsers = [...users]
+       
+        // @filter users state by id
+        // for(let i = 0; i < users.length; i++) {
+        //     if (users[i].id === id) {
+        //         tempUsers.splice(i, 1)
+        //         break
+        //     }
+        // }
+
+        const filteredUsers = users.filter(user => user.id !== id)
+
+        // @set new users state
+        setUsers(filteredUsers)
+    }
+
+    const onButtonCancel = () => {
+        // @rest confirmation state and id
+        setConfirmation({ show : false, message : "" })
+        setId(null)
+    }
+    const onButtonConfirm = () => {
+        const filteredUsers = users.filter(user => user.id !== id)
+
+        // @set new users state
+        setUsers(filteredUsers)
+
+        // @reset id and confirmation state
+        setId(null)
+        setConfirmation({ show : false, message : "" })
+    }
+
     return (
-        <div className="h-full w-full px-40 py-10">
-            <h1 className="mb-1 text-cyan-950 font-bold">User's Table</h1>
-            <h2 className="mb-4 text-cyan-950 font-bold">CRUD(Create, Read, Update, and Delete Operation)</h2>
-            <table className="border-collapse border rounded border-slate-400 w-full h-auto overflow-hidden shadow-sm">
+        <div className="h-full w-full px-40 py-10 bg-neutral-50">
+            <h1 className="mb-2 text-cyan-950 font-bold text-2xl">User's Table</h1>
+            <h2 className="mb-4 text-cyan-950 font-bold">CRUD (Create, Read, Update, and Delete Operation)</h2>
+            <table className="border-collapse border rounded border-slate-400 w-full overflow-hidden shadow-sm">
                 <thead className="bg-slate-200 shadow-sm">
                     <tr>
-                        <th className="border border-slate-300 text-center">ID</th>
+                        <th className="border border-slate-300 text-center px-2">ID</th>
                         <th className="border border-slate-300 px-4 py-2">Name</th>
                         <th className="border border-slate-300 px-4 py-2">Gender</th>
                         <th className="border border-slate-300 px-4 py-2">Birthdate</th>
@@ -217,6 +320,12 @@ function HomePage () {
                     title="Alert" 
                     message={alert.message}
                     onClick={() => setAlert({ show : false, message : "" })}
+                />
+                <Confirmation 
+                    show={confirmation.show}
+                    message={confirmation.message}
+                    onCancel={onButtonCancel}
+                    onConfirm={onButtonConfirm}
                 />
             </div>
         </div>
