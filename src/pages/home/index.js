@@ -99,74 +99,63 @@ function HomePage () {
     const skills = useRef(null)
 
     // @input edit user's data
-    const [editName, setEditName] = useState("")
-    const [editAddress, setEditAddress] = useState("")
-    const [editBirthdate, setEditBirthdate] = useState("")
-    const [editGender, setEditGender] = useState("")
-    const [editSkills, setEditSkills] = useState("")
+    const editedUserName = useRef(null)
+    const editedUserAddress = useRef(null)
+    const editedUserBirthdate = useRef(null)
+    const editedUserGender = useRef(null)
+    const editedUserSkills = useRef(null)
 
     // @convert user's data into table component
     const RenderTableRows = () => users.map((user, index) => {
-        if (id === user?.id && confirmation.actionType !== "DELETE") {
+        if (user.id === id && confirmation.actionType !== "DELETE") {
             return (
-                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
+                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={index}>
                     <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
                     <td className="border border-slate-300 px-2 py-2">
-                        <input type="text" value={editName} onChange={(event) => {
-                            event.preventDefault()
-                            setEditName(event.target.value)
-                        }}
-                            className="border border-slate-300 px-4 py-1 rounded-md w-full" 
+                        <input type="text" ref={editedUserName}
+                            defaultValue={editedUserName.current?.value || user.name}
                             placeholder="user's name"
+                            className="border border-slate-300 px-2 py-1 rounded-md w-full" 
                         />
                     </td>
                     <td className="border border-slate-300 px-2 py-2">
-                        <select onChange={(event) => {
-                            event.preventDefault()
-                            setEditGender(event.target.value)
-                        }}
-                            value={editGender}
+                        <select ref={editedUserBirthdate}
+                            defaultValue={editedUserGender.current?.value || user.gender}
                             className="border border-slate-300 px-2 py-1 rounded-md w-full"
                         >
-                            <option selected={editGender === "Male"}>male</option>
-                            <option selected={editGender === "Female"}>female</option>
+                            <option>male</option>
+                            <option>female</option>
                         </select>
                     </td>
                     <td className="border border-slate-300 text-center py-2">
-                        <input type="date" value={editBirthdate} onChange={(event) => {
-                            event.preventDefault()
-                            setEditBirthdate(event.target.value)
-                        }}
-                            className="border border-slate-300 px-4 py-1 rounded-md w-full"
+                        <input type="date" ref={editedUserBirthdate}
+                            defaultValue={editedUserBirthdate.current?.value || user.birthdate} 
                             placeholder="birthdate"
+                            className="border border-slate-300 px-2 py-1 rounded-md w-full"
                         />
                     </td>
                     <td className="border border-slate-300 px-2 py-2">
-                        <input type="text" value={editAddress} onChange={(event) => {
-                            event.preventDefault()
-                            setEditAddress(event.target.value)
-                        }}
-                            className="border border-slate-300 px-4 py-1 rounded-md w-full"
+                        <input type="text" ref={editedUserAddress}
+                            defaultValue={editedUserAddress.current?.value || user.address} 
                             placeholder="address"
+                            className="border border-slate-300 px-2 py-1 rounded-md w-full"
                         />
                     </td>
                     <td className="border border-slate-300 px-2 py-2">
-                        <input type="text" value={editSkills} onChange={(event) => {
-                            event.preventDefault()
-                            setEditSkills(event.target.value) // @convert array to string
-                        }}
-                            className="border border-slate-300 px-4 py-1 rounded-md w-full"
+                        <input type="text" ref={editedUserSkills}
+                            defaultValue={editedUserSkills.current?.value || user.skills.join(", ")} 
                             placeholder="skills"
+                            className="border border-slate-300 px-2 py-1 rounded-md w-full"
                         />
                     </td>
                     <td className="border h-full border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
-                        <button className="py-1 rounded text-white bg-sky-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
-                            onClick={() => setId(null)}
+                        <button onClick={() => setId(null)}
+                            className="py-1 rounded text-white bg-sky-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
                         >
                             cancel
                         </button>
-                        <button className="py-1 rounded text-white bg-green-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
-                            onClick={() => setConfirmation({ show : true, actionType : "UPDATE", message : `Are you sure you want to save?` })}
+                        <button onClick={() => setConfirmation({ show : true, actionType : "UPDATE", message : `Are you sure you want to save?` })}
+                            className="py-1 rounded text-white bg-green-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
                         >
                             save
                         </button>
@@ -175,7 +164,7 @@ function HomePage () {
             )
         } else {
             return (
-                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
+                <tr className="hover:bg-slate-100 hover:shadow capitalize" key={index}>
                     <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
                     <td className="border border-slate-300 px-2 py-2">{user.name}</td>
                     <td className="border border-slate-300 px-2 py-2">{user.gender}</td>
@@ -184,14 +173,7 @@ function HomePage () {
                     <td className="border border-slate-300 px-2 py-2">{user.skills.join(", ")}</td>
                     <td className="border border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
                         <button className="py-1 rounded text-white bg-amber-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200 capitalize"
-                            onClick={() => {
-                                setId(user.id)
-                                setEditName(user.name)
-                                setEditAddress(user.address)
-                                setEditBirthdate(user.birthdate)
-                                setEditGender(user.gender)
-                                setEditSkills(user.skills.join(", "))
-                            }}
+                            onClick={() => setId(user.id)}
                         >
                             edit
                         </button>
@@ -213,29 +195,29 @@ function HomePage () {
         // @validation => all fields are required
         if (!name.current.value) {
             setAlert({ show : true, message : "name is required!" })
-            return name.current.focus()
+            return
         }
 
         if (!address.current.value) {
             setAlert({ show : true, message : "address is required!" })
-            return address.current.focus()
+            return
         }
 
         if (!birthdate.current.value) {
             setAlert({ show : true, message : "birthdate is required!" })
-            return birthdate.current.focus()
+            return
         }
 
         if (!skills.current.value) {
             setAlert({ show : true, message : "skills is required!" })
-            return skills.current.focus()
+            return
         }
 
         // @validate => check if user's name already exist
         const isExist = users.some(user => user.name === name.current.value)
         if (isExist) {
             setAlert({ show : true, message : "user's name already exist!" })
-            return name.current.focus()
+            return
         }
 
         // @create new user
@@ -258,61 +240,39 @@ function HomePage () {
         skills.current.value = ""
     }
 
-    const onButtonDelete = (id) => {
-        // let tempUsers = [...users]
-       
-        // @filter users state by id
-        // for(let i = 0; i < users.length; i++) {
-        //     if (users[i].id === id) {
-        //         tempUsers.splice(i, 1)
-        //         break
-        //     }
-        // }
-
-        const filteredUsers = users.filter(user => user.id !== id)
-
-        // @set new users state
-        setUsers(filteredUsers)
-    }
-
     const onButtonCancel = () => {
         // @rest confirmation state and id
         setConfirmation({ show : false, actionType : null, message : "" })
         setId(null)
     }
+
     const onButtonConfirm = () => {
-        const ID = id
         if (confirmation.actionType === "DELETE") { 
-            const filteredUsers = users.filter(user => user.id !== ID)
+            const filteredUsers = users.filter(user => user.id !== id)
     
             // @set new users state
             setUsers(filteredUsers)
         }
 
         if (confirmation.actionType === "UPDATE") {
-            console.log(id, editName, editAddress, editBirthdate, editGender, editSkills)
             const updatedUsers = users.map(user => {
-                if (user.id === ID) {
-                    return {
-                        ...user, // @copy initial user's data with same id in the local state
-                        name : editName,
-                        address : editAddress,
-                        birthdate : editBirthdate,
-                        gender : editGender,
-                        skills : editSkills?.split(",")
-                    }
+                if (user?.id === id) {
+                    // @merge new user's data with new edited user's data
+                    return Object.assign(user, { // @copy initial user's data with same id in the local state
+                        name : editedUserName.current?.value,
+                        address :editedUserAddress.current?.value,
+                        birthdate : editedUserBirthdate.current?.valu,
+                        gender : editedUserGender.current?.value,
+                        skills : editedUserSkills.current?.value?.split(",")
+                    })
                 }
+                return user
             })
 
             // @set new users state
             setUsers(updatedUsers)
 
             // @reset edit user's data
-            setEditName("")
-            setEditAddress("")
-            setEditBirthdate("")
-            setEditGender("")
-            setEditSkills("")
         }
 
         // @reset id and confirmation state
