@@ -1,5 +1,6 @@
 import { useState, useRef } from "react"
-// import User from "./user.model"
+import Alert from "../../components/alert"
+
 const USERS = [
     {
         id: 1,
@@ -85,6 +86,7 @@ const USERS = [
 
 function HomePage () {
     const [users, setUsers] = useState(USERS)
+    const [alert, setAlert] = useState({ show : false, message : "" })
     const name = useRef("")
     const address = useRef("")
     const birthdate = useRef("")
@@ -102,11 +104,48 @@ function HomePage () {
                 <td className="border border-slate-300 text-center py-2">{user.birthdate}</td>
                 <td className="border border-slate-300 px-2 py-2">{user.address}</td>
                 <td className="border border-slate-300 px-2 py-2">{user.skills.join(", ")}</td>
+                <td className="border border-slate-300 px-2 py-2 flex flex-row justify-between gap-2">
+                    <button className="py-2 rounded text-white bg-amber-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200">
+                        edit
+                    </button>
+                    <button className="py-2 rounded text-white bg-red-500 grow shadow-sm active:scale-90 transition-all ease-in duration-200">
+                        delete
+                    </button>
+                </td>
             </tr>
         )
     })
 
     const onButtonAdd = () => {
+        // @validation => all fields are required
+        if (!name.current.value) {
+            setAlert({ show : true, message : "name is required!" })
+            return name.current.focus()
+        }
+
+        if (!address.current.value) {
+            setAlert({ show : true, message : "address is required!" })
+            return address.current.focus()
+        }
+
+        if (!birthdate.current.value) {
+            setAlert({ show : true, message : "birthdate is required!" })
+            return birthdate.current.focus()
+        }
+
+        if (!skills.current.value) {
+            setAlert({ show : true, message : "skills is required!" })
+            return skills.current.focus()
+        }
+
+        // @validate => check if user's name already exist
+        const isExist = users.some(user => user.name === name.current.value)
+        if (isExist) {
+            setAlert({ show : true, message : "user's name already exist!" })
+            return name.current.focus()
+        }
+
+        // @create new user
         const newUser = {
             id : users.length + 1,
             name : name.current?.value,
@@ -115,31 +154,31 @@ function HomePage () {
             gender : gender.current?.value,
             skills : skills.current?.value?.split(",")
         }
-        // setUsers([...users, newUser])
-        // setUsers(users.concat(newUser))
-        // const NewUser = new  User(
-        //     users.length + 1,
-        //     name.current.value,
-        //     address.current.value,
-        //     birthdate.current.value,
-        //     gender.current.value,
-        //     skills.current.value.split(",")
-        // )
+
+        // @set new user to users state
         setUsers(prevState => [...prevState, newUser])
+
+        // @reset input fields
+        name.current.value = ""
+        address.current.value = ""
+        birthdate.current.value = ""
+        skills.current.value = ""
     }
 
     return (
         <div className="h-full w-full px-40 py-10">
-            <h1 className="mb-4 text-cyan-950 font-bold">User's Table</h1>
+            <h1 className="mb-1 text-cyan-950 font-bold">User's Table</h1>
+            <h2 className="mb-4 text-cyan-950 font-bold">CRUD(Create, Read, Update, and Delete Operation)</h2>
             <table className="border-collapse border rounded border-slate-400 w-full h-auto overflow-hidden shadow-sm">
                 <thead className="bg-slate-200 shadow-sm">
                     <tr>
-                        <th className="border border-slate-300 px-4 py-2">ID</th>
+                        <th className="border border-slate-300 text-center">ID</th>
                         <th className="border border-slate-300 px-4 py-2">Name</th>
                         <th className="border border-slate-300 px-4 py-2">Gender</th>
                         <th className="border border-slate-300 px-4 py-2">Birthdate</th>
                         <th className="border border-slate-300 px-4 py-2">Address</th>
                         <th className="border border-slate-300 px-4 py-2">Skils</th>
+                        <th className="border border-slate-300 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody className="w-full overflow-scroll">
@@ -170,10 +209,15 @@ function HomePage () {
                     placeholder="skills"
                 />
                 <button onClick={onButtonAdd}
-                    className="grow bg-sky-500 px-10 py-2 rounded text-white"
+                    className="grow bg-sky-500 px-10 py-2 rounded text-white shadow-sm active:scale-90 transition-all ease-in duration-200"
                 >
                     Add
                 </button>
+                <Alert show={alert.show} 
+                    title="Alert" 
+                    message={alert.message}
+                    onClick={() => setAlert({ show : false, message : "" })}
+                />
             </div>
         </div>
     )
