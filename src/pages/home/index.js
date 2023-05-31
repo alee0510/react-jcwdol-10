@@ -284,6 +284,17 @@ function HomePage () {
         <div className="h-full w-full px-40 py-10 bg-neutral-50">
             <h1 className="mb-2 text-cyan-950 font-bold text-2xl">User's Table</h1>
             <h2 className="mb-4 text-cyan-950 font-bold">CRUD (Create, Read, Update, and Delete Operation)</h2>
+
+            {/* @seacrbox */}
+            <div className="w-full flex flex-row align-middle justify-between gap-2 my-2">
+                <input className="w-full px-2 py-2 rounded border-2 border-gray-400" type="text" placeholder="search by user's name" />
+                <select className="w-1/4 px-2 py-2 border-2 border-gray-400 rounded">
+                    <option>Sort Name A-Z</option>
+                    <option>Sort Name Z-A</option>
+                </select>
+            </div>
+
+            {/* @table */}
             <table className="border-collapse border rounded border-slate-400 w-full overflow-hidden shadow-sm">
                 <thead className="bg-slate-200 shadow-sm">
                     <tr>
@@ -296,10 +307,12 @@ function HomePage () {
                         <th className="border border-slate-300 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="w-full overflow-scroll">
+                <tbody className="h-10 overflow-hidden">
                     <RenderTableRows/>
                 </tbody>
             </table>
+
+            {/* @new input */}
             <div className="w-full my-3 flex flex-row flex-wrap item-center justify-between gap-2">
                 <input type="text" ref={name}
                     className="border border-slate-300 px-4 py-2 rounded-md grow" 
@@ -328,11 +341,15 @@ function HomePage () {
                 >
                     Add
                 </button>
+
+                {/* @alert */}
                 <Alert show={alert.show} 
                     title="Alert" 
                     message={alert.message}
                     onClick={() => setAlert({ show : false, message : "" })}
                 />
+
+                {/* @confirmation */}
                 <Confirmation 
                     show={confirmation.show}
                     message={confirmation.message}
