@@ -1,7 +1,7 @@
 ### How to use raw Redux core
 
 ```javascript
-import { useSelector, useDispatch } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { createStore } from "redux"
 
 // @create initialize state
