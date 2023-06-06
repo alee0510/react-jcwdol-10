@@ -1,14 +1,25 @@
 import { useState, useRef } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import Alert from "../../components/alert"
 import Confirmation from "../../components/confirmation"
 import { USERS } from "./constants"
 import RenderTableRows from "./component.table.row"
 
+// @hook and actions
+import { deleteUser } from "../../store/slices/users"
+
 function HomePage () {
-    const [users, setUsers] = useState(USERS)
     const [alert, setAlert] = useState({ show : false, message : "" })
     const [id, setId] = useState(null)
     const [confirmation, setConfirmation] = useState({ show : false, actionType : null, message : "" })
+
+    // @hooks and redux
+    const dispatch = useDispatch()
+    const { users } = useSelector(state => {
+        return {
+            users : state.users?.data
+        }
+    })
 
     // @input add new user's data
     const name = useRef(null)
@@ -26,32 +37,32 @@ function HomePage () {
 
     const onButtonAdd = () => {
         // @validation => all fields are required
-        if (!name.current.value) {
-            setAlert({ show : true, message : "name is required!" })
-            return
-        }
+        // if (!name.current.value) {
+        //     setAlert({ show : true, message : "name is required!" })
+        //     return
+        // }
 
-        if (!address.current.value) {
-            setAlert({ show : true, message : "address is required!" })
-            return
-        }
+        // if (!address.current.value) {
+        //     setAlert({ show : true, message : "address is required!" })
+        //     return
+        // }
 
-        if (!birthdate.current.value) {
-            setAlert({ show : true, message : "birthdate is required!" })
-            return
-        }
+        // if (!birthdate.current.value) {
+        //     setAlert({ show : true, message : "birthdate is required!" })
+        //     return
+        // }
 
-        if (!skills.current.value) {
-            setAlert({ show : true, message : "skills is required!" })
-            return
-        }
+        // if (!skills.current.value) {
+        //     setAlert({ show : true, message : "skills is required!" })
+        //     return
+        // }
 
-        // @validate => check if user's name already exist
-        const isExist = users.some(user => user.name === name.current.value)
-        if (isExist) {
-            setAlert({ show : true, message : "user's name already exist!" })
-            return
-        }
+        // // @validate => check if user's name already exist
+        // const isExist = users.some(user => user.name === name.current.value)
+        // if (isExist) {
+        //     setAlert({ show : true, message : "user's name already exist!" })
+        //     return
+        // }
 
         // @create new user
         const newUser = {
@@ -64,7 +75,7 @@ function HomePage () {
         }
 
         // @set new user to users state
-        setUsers(prevState => [...prevState, newUser])
+        // setUsers(prevState => [...prevState, newUser])
 
         // @reset input fields
         name.current.value = ""
@@ -81,10 +92,12 @@ function HomePage () {
 
     const onButtonConfirm = () => {
         if (confirmation.actionType === "DELETE") { 
-            const filteredUsers = users.filter(user => user.id !== id)
+            // const filteredUsers = users.filter(user => user.id !== id)
     
             // @set new users state
-            setUsers(filteredUsers)
+            // setUsers(filteredUsers)
+            console.log("delete")
+            dispatch(deleteUser({ id }))
         }
 
         if (confirmation.actionType === "UPDATE") {
@@ -103,7 +116,7 @@ function HomePage () {
             })
 
             // @set new users state
-            setUsers(updatedUsers)
+            // setUsers(updatedUsers)
         }
 
         // @reset id and confirmation state
@@ -111,6 +124,7 @@ function HomePage () {
         setConfirmation({ show : false, actionType : null, message : "" })
     }
 
+    console.log(confirmation)
     return (
         <div className="h-full w-full px-40 py-10 bg-neutral-50">
             <h1 className="mb-2 text-cyan-950 font-bold text-2xl">User's Table</h1>
@@ -152,6 +166,7 @@ function HomePage () {
                         onButtonDelete={(id, name) => {
                             setId(id)
                             setConfirmation({ show : true, actionType : "DELETE", message : `Are you sure you want to delete ${name}?` })
+                            window.my_modal_1.showModal()
                         }}
                         onButtonEdit={(id) => setId(id)}
                         onButtonSave={() => {
@@ -191,19 +206,12 @@ function HomePage () {
                     Add
                 </button>
 
-                {/* @alert */}
-                <Alert show={alert.show} 
-                    title="Alert" 
-                    message={alert.message}
-                    onClick={() => setAlert({ show : false, message : "" })}
-                />
-
                 {/* @confirmation */}
                 <Confirmation 
                     show={confirmation.show}
                     message={confirmation.message}
-                    onCancel={onButtonCancel}
-                    onConfirm={onButtonConfirm}
+                    onButtonCancel={onButtonCancel}
+                    onButtonConfirm={onButtonConfirm}
                 />
             </div>
         </div>

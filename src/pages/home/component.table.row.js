@@ -14,7 +14,7 @@ const RenderTableRows = ({
 }) => users.map((user, index) => {
     if (user.id === id && actionType !== "DELETE") {
         return (
-            <EditedRow index={index}
+            <EditedRow index={user.id}
                 user={user}
                 refEditedUserName={refEditedUserName}
                 refEditedUserGender={refEditedUserGender}
@@ -27,7 +27,7 @@ const RenderTableRows = ({
         )
     } else {
         return (
-            <NormalRow index={index} 
+            <NormalRow index={user.id} 
                 user={user} 
                 onButtonEdit={onButtonEdit} 
                 onButtonDelete={onButtonDelete}
@@ -43,7 +43,7 @@ function NormalRow ({
     onButtonDelete = (id, name) => {}
 }) {
     return (
-        <tr className="hover:bg-slate-100 hover:shadow capitalize" key={index}>
+        <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
             <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
             <td className="border border-slate-300 px-2 py-2">{user.name}</td>
             <td className="border border-slate-300 px-2 py-2">{user.gender}</td>
@@ -78,7 +78,7 @@ function EditedRow ({
     onButtonSave = () => {}
 }) {
     return (
-        <tr className="hover:bg-slate-100 hover:shadow capitalize" key={index}>
+        <tr className="hover:bg-slate-100 hover:shadow capitalize" key={user.id}>
             <td className="border border-slate-300 text-center py-2 ">{user.id}</td>
             <td className="border border-slate-300 px-2 py-2">
                 <input type="text" ref={refEditedUserName}
