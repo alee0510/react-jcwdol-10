@@ -8,7 +8,6 @@ const store = configureStore({
     reducer : {
         users : usersReducer
     },
-    enhancers : []
 })
 
 // @export store
