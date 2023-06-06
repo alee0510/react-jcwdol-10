@@ -5,7 +5,7 @@ import Confirmation from "../../components/confirmation"
 import RenderTableRows from "./component.table.row"
 
 // @hook and actions
-import { deleteUser, addUser, editUser, searchUser, clearSearch } from "../../store/slices/users"
+import { deleteUser, addUser, editUser, searchUser, clearSearch, sorting } from "../../store/slices/users"
 
 function HomePage () {
     const [id, setId] = useState(null)
@@ -35,9 +35,6 @@ function HomePage () {
     const editedUserBirthdate = useRef(null)
     const editedUserGender = useRef(null)
     const editedUserSkills = useRef(null)
-
-    // @search ref
-    const searchByName = useRef(null)
 
     const onButtonAdd = () => {
         // @validation => all fields are required
@@ -123,7 +120,12 @@ function HomePage () {
         setSearch("")
     }
 
-    // @side-effect
+    const onSorting = (event) => {
+        event?.preventDefault()
+        dispatch(sorting(event?.target?.value))
+    }
+
+    // @side-effect -> debounce search
     useEffect(() => {
         // guard
         if (!search) return
@@ -145,16 +147,21 @@ function HomePage () {
                 <input value={search} 
                     type="text" 
                     placeholder="search by name" 
-                    className="input input-bordered w-full max-w-xs" 
-                    onChange={(event) => setSearch(event?.target?.value)}
+                    className="input input-bordered w-full" 
+                    onChange={(event) => {
+                        event?.preventDefault()
+                        setSearch(event?.target?.value)
+                    }}
                 />
-                <button className="btn btn-square" onClick={onClearSearch}>
+                <select className="select select-bordered w-full max-w-xs" 
+                    onChange={onSorting}
+                >
+                    <option value="AZ">Sort Name A-Z</option>
+                    <option value="ZA">Sort Name Z-A</option>
+                </select>
+                <button className="btn btn-square btn-secondary" onClick={onClearSearch}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
-                <select className="select select-bordered w-full max-w-xs">
-                    <option>Sort Name A-Z</option>
-                    <option>Sort Name Z-A</option>
-                </select>
             </div>
 
             {/* @table */}
@@ -218,7 +225,7 @@ function HomePage () {
                     placeholder="skills"
                 />
                 <button onClick={onButtonAdd}
-                    className="grow bg-sky-500 px-10 py-2 rounded text-white shadow-sm active:scale-90 transition-all ease-in duration-200"
+                    className="btn btn-secondary w-full max-w-sm"
                 >
                     Add
                 </button>

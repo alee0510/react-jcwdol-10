@@ -31,6 +31,19 @@ const usersSlice = createSlice({
         },
         clearSearch : (state, action) => {
             state.filteredData = []
+        },
+        sorting : (state, action) => {
+            state.filteredData = state.data.sort((a, b) => {
+                if (a?.name < b?.name) {
+                    return action.payload === "AZ" ? -1 : 1
+                }
+
+                if (a?.name > b?.name) {
+                    return action.payload === "AZ" ? 1 : -1
+                }
+
+                return 0
+            })
         }
     }
 })
@@ -39,4 +52,4 @@ const usersSlice = createSlice({
 export default usersSlice.reducer
 
 // export actions
-export const { deleteUser, addUser, editUser, searchUser, clearSearch } = usersSlice.actions
+export const { deleteUser, addUser, editUser, searchUser, clearSearch, sorting } = usersSlice.actions
