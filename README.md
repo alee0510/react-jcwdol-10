@@ -44,3 +44,27 @@ function App () {
 }
 
 ````
+
+```
+        // @define query search
+        // const query = "?username=" + username + "&password=" + password
+
+        // @do api call
+        // fetch("http://localhost:2000/users" + query, { method : "GET" })
+        // .then(response => {
+        //     console.log(response.json())
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
+
+        // Axios.get("http://localhost:2000/users" + query)
+        // .then(response => {
+        //     console.log(response.data)
+        //     dispatch(saveUser(response?.data[0]))
+
+        //     // @redirect
+        //     navigation("/home")
+        // })
+        // .catch(error => console.log(error))
+```

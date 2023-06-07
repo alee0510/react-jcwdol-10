@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "uuid": "",
+      "username": "admin",
+      "password": "admin123",
+      "email": "admin@gmail.com",
+      "role": "admin",
+      "status": "active",
+      "token": "random_token"
+    },
+    {
+      "uuid": "",
+      "username": "alee0510",
+      "email": "ali.muksin0510@gmail.com",
+      "password": "lollipop",
+      "role": "user",
+      "status": "active",
+      "token": "w366ck",
+      "id": 2
+    }
+  ]
+}
