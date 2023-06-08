@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { useDispatch, useSelector} from "react-redux"
 import { Navigate } from "react-router-dom"
-import { register } from "../../store/slices/auth"
+import { register } from "../../store/slices/auth/slices"
 
 function RegisterPage () {
     // @ref
@@ -41,10 +41,10 @@ function RegisterPage () {
                 <input ref={emailRef} placeholder="email" type="email"
                     className="input input-bordered w-full mb-5"
                 />
-                <input ref={passwordRef} placeholder="Password" type="text"
+                <input ref={passwordRef} placeholder="Password" type="password"
                     className="input input-bordered w-full mb-5"
                 />
-                <input ref={rePasswordRef} placeholder="Re-password" type="text"
+                <input ref={rePasswordRef} placeholder="Re-password" type="password"
                     className="input input-bordered w-full mb-5"
                 />
                 <button onClick={onButtonRegister}

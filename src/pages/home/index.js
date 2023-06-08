@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from "react-redux"
 import Alert from "../../components/alert"
 import Confirmation from "../../components/confirmation"
 import RenderTableRows from "./component.table.row"
+import Navbar from "../../components/navbar"
 
 // @hook and actions
 import { deleteUser, addUser, editUser, searchUser, clearSearch, sorting } from "../../store/slices/users"
+import { getUsers } from "../../store/slices/users/slices"
 
 function HomePage () {
     const [id, setId] = useState(null)
@@ -15,10 +17,11 @@ function HomePage () {
 
     // @hooks and redux
     const dispatch = useDispatch()
-    const { users, filteredUsers } = useSelector(state => {
+    const { users, filteredUsers, loading } = useSelector(state => {
         return {
             users : state.users?.data,
-            filteredUsers : state.users?.filteredData
+            filteredUsers : state.users?.filteredData,
+            loading : state.users?.loading
         }
     })
 
@@ -137,8 +140,16 @@ function HomePage () {
         return () => clearTimeout(timeoutID)
     }, [search])
 
+    // @side-effect
+    useEffect(() => {
+        dispatch(getUsers())
+    }, [])
+
     return (
         <div className="h-full w-full px-40 py-10 bg-neutral-50">
+            {/* @navbar */}
+            <Navbar />
+            
             <h1 className="mb-2 text-cyan-950 font-bold text-2xl">User's Table</h1>
             <h2 className="mb-4 text-cyan-950 font-bold">CRUD (Create, Read, Update, and Delete Operation)</h2>
 
@@ -165,40 +176,50 @@ function HomePage () {
             </div>
 
             {/* @table */}
-            <table className="border-collapse border rounded border-slate-400 w-full overflow-hidden shadow-sm">
-                <thead className="bg-slate-200 shadow-sm">
-                    <tr>
-                        <th className="border border-slate-300 text-center px-2">ID</th>
-                        <th className="border border-slate-300 px-4 py-2">Name</th>
-                        <th className="border border-slate-300 px-4 py-2">Gender</th>
-                        <th className="border border-slate-300 px-4 py-2">Birthdate</th>
-                        <th className="border border-slate-300 px-4 py-2">Address</th>
-                        <th className="border border-slate-300 px-4 py-2">Skils</th>
-                        <th className="border border-slate-300 text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="h-10 overflow-hidden">
-                    <RenderTableRows
-                        users={filteredUsers.length ? filteredUsers : users}
-                        id={id}
-                        actionType={confirmation.actionType}
-                        refEditedUserName={editedUserName}
-                        refEditedUserAddress={editedUserAddress}
-                        refEditedUserBirthdate={editedUserBirthdate}
-                        refEditedUserGender={editedUserGender}
-                        refEditedUserSkills={editedUserSkills}
-                        onButtonCancel={() => setId(null)}
-                        onButtonDelete={(id, name) => {
-                            setId(id)
-                            setConfirmation({ show : true, actionType : "DELETE", message : `Are you sure you want to delete ${name}?` })
-                        }}
-                        onButtonEdit={(id) => setId(id)}
-                        onButtonSave={() => {
-                            setConfirmation({ show : true, actionType : "UPDATE", message : `Are you sure you want to save?` })
-                        }}
-                    />
-                </tbody>
-            </table>
+            {
+                loading ?
+                (
+                    <div className="flex flex-row align-bottom justify-center">
+                        <span className="loading loading-dots loading-lg"></span>
+                    </div>
+                ) : 
+                (
+                <table className="border-collapse border rounded border-slate-400 w-full overflow-hidden shadow-sm">
+                    <thead className="bg-slate-200 shadow-sm">
+                        <tr>
+                            <th className="border border-slate-300 text-center px-2">ID</th>
+                            <th className="border border-slate-300 px-4 py-2">Name</th>
+                            <th className="border border-slate-300 px-4 py-2">Gender</th>
+                            <th className="border border-slate-300 px-4 py-2">Birthdate</th>
+                            <th className="border border-slate-300 px-4 py-2">Address</th>
+                            <th className="border border-slate-300 px-4 py-2">Skils</th>
+                            <th className="border border-slate-300 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="h-10 overflow-hidden">
+                        <RenderTableRows
+                            users={filteredUsers.length ? filteredUsers : users}
+                            id={id}
+                            actionType={confirmation.actionType}
+                            refEditedUserName={editedUserName}
+                            refEditedUserAddress={editedUserAddress}
+                            refEditedUserBirthdate={editedUserBirthdate}
+                            refEditedUserGender={editedUserGender}
+                            refEditedUserSkills={editedUserSkills}
+                            onButtonCancel={() => setId(null)}
+                            onButtonDelete={(id, name) => {
+                                setId(id)
+                                setConfirmation({ show : true, actionType : "DELETE", message : `Are you sure you want to delete ${name}?` })
+                            }}
+                            onButtonEdit={(id) => setId(id)}
+                            onButtonSave={() => {
+                                setConfirmation({ show : true, actionType : "UPDATE", message : `Are you sure you want to save?` })
+                            }}
+                        />
+                    </tbody>
+                </table>
+                )
+            }
 
             {/* @new input */}
             <div className="w-full my-3 flex flex-row flex-wrap item-center justify-between gap-2">

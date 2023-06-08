@@ -1,51 +1,32 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useDispatch, useSelector } from "react-redux"
+import { logout } from "../../store/slices/auth/slices"
 
-function NavScrollExample() {
-  return (
-    <Navbar bg="light" expand="lg">
-      <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-            <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+export default function Navbar () {
+	// @hooks
+	const dispatch = useDispatch()
+	const { username } = useSelector(state => {
+		return {
+			username : state.auth?.username
+		}
+	})
+
+	return (
+		<div className="navbar bg-base-100">
+			<div className="flex-1">
+				<a className="btn btn-ghost normal-case text-xl">Dashboard</a>
+			</div>
+			<div className="flex-none">
+				<div className="dropdown dropdown-end">
+				<label tabIndex={0} className="btn btn-ghost btn-circle avatar placeholder">
+					<div className="bg-neutral-focus text-neutral-content rounded-full w-12">
+						<span>{username[0]?.toUpperCase()}</span>
+					</div>
+				</label>
+				<ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+					<li><a className="cursor-pointer" onClick={() => dispatch(logout())}>Logout</a></li>
+				</ul>
+				</div>
+			</div>
+		</div>
+	)
 }
-
-export default NavScrollExample;

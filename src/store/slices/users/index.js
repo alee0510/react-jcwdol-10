@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { USERS } from "../../../pages/home/constants"
+// import { USERS } from "../../../pages/home/constants"
+
+// @import slices
+import { getUsers } from "./slices"
 
 // users slice
 const usersSlice = createSlice({
     name : "users",
     initialState : {
-        data : USERS,
+        loading : false,
+        data : [],
         filteredData : []
     },
     reducers : {
@@ -44,6 +48,18 @@ const usersSlice = createSlice({
 
                 return 0
             })
+        }
+    },
+    extraReducers : {
+        [getUsers.pending] : (state, action) => {
+            state.loading = true
+        },
+        [getUsers.fulfilled] : (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        },
+        [getUsers.rejected] : (state, action) => {
+            state.loading = false
         }
     }
 })
