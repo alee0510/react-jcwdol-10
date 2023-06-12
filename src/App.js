@@ -6,6 +6,8 @@ import { Routes, Route } from "react-router-dom"
 import HomePage from "./pages/home"
 import LoginPage from "./pages/login"
 import RegisterPage from "./pages/register"
+import VerificationPage from "./pages/verification"
+import BlogsPage from "./pages/blogs"
 
 // @import component
 import ProtectedRoute from "./protected.routes"
@@ -46,6 +48,8 @@ function App() {
 				/>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path="/verification" element={<VerificationPage />} />
+				<Route path="/blogs" element={<BlogsPage />} />
 			</Routes>
 		</div>
 	);

@@ -33,7 +33,7 @@ const authSlice = createSlice({
             state.token = action.payload?.token            
         },
         [login.rejected] : (state, action) => {
-            state.isKeepLoginLoading = false
+            state.loading = false
         },
         [keepLogin.pending] : (state, action) => {
             state.isKeepLoginLoading = true
@@ -48,7 +48,7 @@ const authSlice = createSlice({
             state.token = action.payload?.token            
         },
         [keepLogin.rejected] : (state, action) => {
-            state.loading = false
+            state.isKeepLoginLoading = false
         },
         [register.pending] : (state, action) => {
             state.loading = true
