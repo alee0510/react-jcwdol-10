@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Routes, Route } from "react-router-dom"
+import { Toaster } from "react-hot-toast"
 
 // @import page
 import HomePage from "./pages/home"
@@ -42,15 +43,16 @@ function App() {
 					path="/" 
 					element={
 						<ProtectedRoute>
-							<HomePage />
+							<BlogsPage />
 						</ProtectedRoute>
 					} 
 				/>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/verification" element={<VerificationPage />} />
-				<Route path="/blogs" element={<BlogsPage />} />
+				{/* <Route path="/blogs" element={<BlogsPage />} /> */}
 			</Routes>
+			<Toaster/>
 		</div>
 	);
 }

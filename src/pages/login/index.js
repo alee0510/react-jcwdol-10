@@ -1,4 +1,3 @@
-import { useRef } from "react"
 import { Navigate, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Formik } from "formik"
@@ -9,27 +8,15 @@ function LoginPage () {
     // @hooks
     const dispatch = useDispatch()
     const navigate =  useNavigate()
-    const { token, loading } = useSelector(state => {
+    const { id, loading } = useSelector(state => {
         return {
-            token : state.auth.token,
-            loading : state.auth.loading
+            id : state.auth.id,
+            loading : state.auth.isLoginLoading
         }
     })
 
-    // @ref
-    // const usernameRef = useRef()
-    // const passwordRef = useRef()
-
-    // @event handler
-    // const onButtonLogin = () => {
-    //     const username = usernameRef.current.value
-    //     const password = passwordRef.current.value
-
-    //     dispatch(login({ username, password }))
-    // }
-
     // @redirect
-    if (token) {
+    if (id) {
         return <Navigate to="/" replace/>
     }
 

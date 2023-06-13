@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { registerValidationSchema } from "./validation"
-import { encrypt } from "./encryption"
+import Toast from "react-hot-toast"
 import api from "../../utils/api.instance"
 
 // @create async thunk
@@ -8,21 +8,20 @@ export const login = createAsyncThunk(
     "auth/login",
     async (payload, { rejectWithValue }) => {
         try {
-            const encryptedPassword = encrypt(payload.password)
-            const response = await api.get("/users" + `?username=${payload.username}&password=${encryptedPassword}`)
-
-            // @if data empty
-            if (response.data?.length === 0) {
-                return rejectWithValue({ message : "username or password does't exist." })
-            }
+            // @do authentication with payload : { username, password }
+            const { data } = await api.post("/auth/login", payload)
 
             // @save token to local storage
-            localStorage.setItem("token", response?.data[0]?.token)
+            localStorage.setItem("token", data?.token)
 
-            return response.data[0]
+            // @show toast success
+            Toast.success("Login success.")
+
+            return data?.isAccountExist
         } catch (error) {
             console.error(error)
-            return rejectWithValue(error.response.data)
+            Toast.error("Error : something went wrong.")
+            return rejectWithValue(error?.response?.data)
         }
     }
 )
@@ -31,20 +30,13 @@ export const keepLogin = createAsyncThunk(
     "auth/keepLogin",
     async (payload, { rejectWithValue }) => {
         try {
-            // get token from local storage
-            const token = localStorage.getItem("token")
+            // @get user data with token
+            const { data } = await api.get("/auth")
 
-            // @if token empty
-            if (!token) {
-                return rejectWithValue({ message : "token not found." })
-            }
-
-            // @get data user
-            const response = await api.get("/users" + `?token=${token}`)
-
-            return response.data[0]
+            return data
         } catch (error) {
             console.error(error)
+            Toast.error("Error : something went wrong.")
             return rejectWithValue(error.response.data)
         }
     }
@@ -67,10 +59,10 @@ export const register = createAsyncThunk(
             const data = {
                 username : payload.username,
                 email : payload.email,
-                password : encrypt(payload.password),
+                password :"",
                 role : "user",
                 status : "active",
-                token : encrypt(payload.username + payload.email)
+                token : ""
             }
             await api.post("/users", data)
 

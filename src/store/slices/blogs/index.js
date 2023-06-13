@@ -8,8 +8,6 @@ const INITIAL_STATE = {
     totalPage : 1,
     currentPage : 1,
     isLoading : false,
-    // errorCode : null,
-    // errorMessage : null,
 }
 
 const blogsSlice = createSlice({
@@ -20,16 +18,20 @@ const blogsSlice = createSlice({
             state.isLoading = true
         },
         [getArticles.fulfilled] : (state, action) => {
-            state.isLoading = false
-            state.articles = action.payload?.result
-            state.totalPage = action.payload?.page
-            state.currentPage = action.payload?.blogPage
+            // state.isLoading = false
+            // state.articles = action.payload?.result
+            // state.totalPage = action.payload?.page
+            // state.currentPage = action.payload?.blogPage
+
+            state = Object.assign(state, {
+                isLoading : false,
+                articles : action.payload?.result,
+                totalPage : action.payload?.page,
+                currentPage : action.payload?.blogPage,
+            })
         },
         [getArticles.rejected] : (state, action) => {
             state.isLoading = false
-            // state.errorCode = action.payload?.errorCode
-            // state.errorMessage = action.payload?.errorMessage
-            // @do error handle, console or show toast / alert message
         }
     }
 })

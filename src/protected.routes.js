@@ -4,11 +4,10 @@ import { Navigate } from "react-router-dom"
 export default function ProtectedRoute ({
     children
 }) {
-    const { token } = useSelector(state => {
+    const { id } = useSelector(state => {
         return {
-            token : state.auth.token
+            id : state.auth.id
         }
     })
-    
-    return token ? children : <Navigate to="/login" replace/>
+    return id ? children : <Navigate to="/login" replace/>
 }

@@ -3,49 +3,72 @@ import { createSlice } from "@reduxjs/toolkit";
 // @import async thunk
 import { login, keepLogin, register, logout } from "./slices";
 
+// @initial state
+const INITIAL_STATE = {
+    isLoginLoading : false,
+    isKeepLoginLoading : false, 
+    isLogoutLoading : false,
+    id : null,
+    username: "",
+    email: "",
+    phone : "",
+    imgProfile : null,
+    isVerified : true,
+    role : true,
+}
+
 // @create slice
 const authSlice = createSlice({
     name : "auth",
-    initialState : {
-        loading : false,
-        isKeepLoginLoading : false,
-        id : null,
-        username : null,
-        password : null,
-        email : null,
-        role : null,
-        token : null
-    },
-    reducers : {
-
-    },
+    initialState : INITIAL_STATE,
     extraReducers : {
         [login.pending] : (state, action) => {
-            state.loading = true
+            state.isLoginLoading = true
         },
         [login.fulfilled] : (state, action) => {
-            state.loading = false
-            state.id = action.payload?.id
-            state.username = action.payload?.username
-            state.password = action.payload?.password
-            state.email = action.payload?.email
-            state.role = action.payload?.role
-            state.token = action.payload?.token            
+            // state.isLoginLoading = false
+            // state.id = action.payload?.id
+            // state.username = action.payload?.username
+            // state.email = action.payload?.email
+            // state.role = action.payload?.role
+            // state.isVerified = action.payload?.isVerified 
+            
+            state = Object.assign(state, {
+                isLoginLoading : false,
+                id : action.payload?.id,
+                username : action.payload?.username,
+                phone : action.payload?.phone,
+                imageProfile : action.payload?.imageProfile,
+                email : action.payload?.email,
+                role : action.payload?.role,
+                isVerified : action.payload?.isVerified,
+            })
         },
         [login.rejected] : (state, action) => {
-            state.loading = false
+            state.isLoginLoading = false
         },
         [keepLogin.pending] : (state, action) => {
             state.isKeepLoginLoading = true
         },
         [keepLogin.fulfilled] : (state, action) => {
-            state.isKeepLoginLoading = false
-            state.id = action.payload?.id
-            state.username = action.payload?.username
-            state.password = action.payload?.password
-            state.email = action.payload?.email
-            state.role = action.payload?.role
-            state.token = action.payload?.token            
+            // state.isKeepLoginLoading = false
+            // state.id = action.payload?.id
+            // state.username = action.payload?.username
+            // state.password = action.payload?.password
+            // state.email = action.payload?.email
+            // state.role = action.payload?.role
+            // state.token = action.payload?.token          
+            
+            state = Object.assign(state, {
+                isKeepLoginLoading : false,
+                id : action.payload?.id,
+                username : action.payload?.username,
+                phone : action.payload?.phone,
+                imageProfile : action.payload?.imageProfile,
+                email : action.payload?.email,
+                role : action.payload?.role,
+                isVerified : action.payload?.isVerified,
+            })
         },
         [keepLogin.rejected] : (state, action) => {
             state.isKeepLoginLoading = false
@@ -66,19 +89,13 @@ const authSlice = createSlice({
             state.loading = false
         },
         [logout.pending] : (state, action) => {
-            state.loading = true
+            state.isLogoutLoading = true
         },
         [logout.fulfilled] : (state, action) => {
-            state.loading = false
-            state.id = null
-            state.username = null
-            state.password = null
-            state.email = null
-            state.role = null
-            state.token = null            
+            state = INITIAL_STATE         
         },
         [logout.rejected] : (state, action) => {
-            state.loading = false
+            state.isLogoutLoading = false
         }
     }
 })

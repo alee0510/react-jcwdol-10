@@ -13,7 +13,7 @@ export default function Navbar () {
 	return (
 		<div className="navbar bg-base-100">
 			<div className="flex-1">
-				<a className="btn btn-ghost normal-case text-xl">Dashboard</a>
+				<a className="btn btn-ghost normal-case text-xl">Blogs</a>
 			</div>
 			<div className="flex-none">
 				<div className="dropdown dropdown-end">
@@ -22,7 +22,7 @@ export default function Navbar () {
 						<span>{username[0]?.toUpperCase()}</span>
 					</div>
 				</label>
-				<ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+				<ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-10">
 					<li><a className="cursor-pointer" onClick={() => dispatch(logout())}>Logout</a></li>
 				</ul>
 				</div>
