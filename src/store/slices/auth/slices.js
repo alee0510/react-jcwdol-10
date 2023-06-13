@@ -94,3 +94,19 @@ export const logout = createAsyncThunk(
         }
     }
 )
+
+export const updateImageProfile = createAsyncThunk(
+    "auth/updateProfile",
+    async (payload, { rejectWithValue }) => {
+        try {
+            const { data } = await api.post("/profile/single-uploaded", payload)
+
+            Toast.success("Update image profile success.")
+            return data?.imgProfile
+        } catch (error) {
+            console.error(error)
+            Toast.error("Error : something went wrong.")
+            return rejectWithValue(error.response.data)
+        }
+    }
+)

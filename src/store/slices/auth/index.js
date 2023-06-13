@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // @import async thunk
-import { login, keepLogin, register, logout } from "./slices";
+import { login, keepLogin, register, logout, updateImageProfile } from "./slices";
 
 // @initial state
 const INITIAL_STATE = {
     isLoginLoading : false,
     isKeepLoginLoading : false, 
     isLogoutLoading : false,
+    isUploadImageLoading : false,
     id : null,
     username: "",
     email: "",
@@ -92,10 +93,20 @@ const authSlice = createSlice({
             state.isLogoutLoading = true
         },
         [logout.fulfilled] : (state, action) => {
-            state = INITIAL_STATE         
+            state = Object.assign(state, INITIAL_STATE)         
         },
         [logout.rejected] : (state, action) => {
             state.isLogoutLoading = false
+        },
+        [updateImageProfile.pending] : (state, action) => {
+            state.isUploadImageLoading = true
+        },
+        [updateImageProfile.fulfilled] : (state, action) => {
+            state.isUploadImageLoading = false
+            state.imgProfile = action.payload
+        },
+        [updateImageProfile.rejected] : (state, action) => {
+            state.isUploadImageLoading = false
         }
     }
 })

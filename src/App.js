@@ -9,6 +9,7 @@ import LoginPage from "./pages/login"
 import RegisterPage from "./pages/register"
 import VerificationPage from "./pages/verification"
 import BlogsPage from "./pages/blogs"
+import FormUploadImage from "./pages/upload-image"
 
 // @import component
 import ProtectedRoute from "./protected.routes"
@@ -50,6 +51,7 @@ function App() {
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/verification" element={<VerificationPage />} />
+				<Route path="/profile" element={<FormUploadImage />} />
 				{/* <Route path="/blogs" element={<BlogsPage />} /> */}
 			</Routes>
 			<Toaster/>
