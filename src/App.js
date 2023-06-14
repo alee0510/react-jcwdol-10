@@ -50,7 +50,7 @@ function App() {
 				/>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
-				<Route path="/verification" element={<VerificationPage />} />
+				<Route path="/verification/:token" element={<VerificationPage />} />
 				<Route path="/profile" element={<FormUploadImage />} />
 				{/* <Route path="/blogs" element={<BlogsPage />} /> */}
 			</Routes>

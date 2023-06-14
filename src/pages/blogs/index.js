@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getArticles } from "../../store/slices/blogs/slices"
+import { getArticles, likeArticle } from "../../store/slices/blogs/slices"
 
 import Navbar from "../../components/navbar"
 
@@ -34,6 +34,8 @@ function BlogsPage () {
         }))
     }
 
+    const onButtonLike = (id) => dispatch(likeArticle({ BlogId : id }))
+
     // @render loading
     if (loading) return (
         <div className="h-screen w-screen flex flex-row align-bottom justify-center">
@@ -44,7 +46,7 @@ function BlogsPage () {
     return (
         <div className="w-full h-full px-40 py-10 flex flex-row flex-wrap gap-5 justify-between ">
             <Navbar />
-            <RenderBlogCards articles={articles} />
+            <RenderBlogCards articles={articles} onButtonLike={onButtonLike}/>
             <div className="flex flex-row w-full h-auto justify-end">
                 <Pagination 
                     onChangePagination={onChangePagination}

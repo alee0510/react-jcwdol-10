@@ -19,9 +19,9 @@ export const login = createAsyncThunk(
 
             return data?.isAccountExist
         } catch (error) {
-            console.error(error)
-            Toast.error("Error : something went wrong.")
-            return rejectWithValue(error?.response?.data)
+            // console.error(error.response ? error.response.data : error)
+            // Toast.error("Error : something went wrong.")
+            return rejectWithValue(error.response ? error.response.data : error)
         }
     }
 )
@@ -35,9 +35,9 @@ export const keepLogin = createAsyncThunk(
 
             return data
         } catch (error) {
-            console.error(error)
-            Toast.error("Error : something went wrong.")
-            return rejectWithValue(error.response.data)
+            // console.error(error.response ? error.response.data : error)
+            // Toast.error("Error : something went wrong.")
+            return rejectWithValue(error.response ? error.response.data : error)
         }
     }
 )
@@ -46,36 +46,18 @@ export const register = createAsyncThunk(
     "auth/register",
     async (payload, { rejectWithValue }) => {
         try {
-            // @do validation
-            await registerValidationSchema.validate(payload)
+            const { data } = await api.post("/auth", payload)
 
-            // @do validation in remote -> check if username or email already exist
-            const response = await api.get("/users" + `?username=${payload.username}&email=${payload.email}`)
-            if (response.data?.length > 0) {
-                return rejectWithValue({ message : "username or email already exist." })
-            }
+            // save token
+            localStorage.setItem("token", data?.token)
 
-            // @save data to database
-            const data = {
-                username : payload.username,
-                email : payload.email,
-                password :"",
-                role : "user",
-                status : "active",
-                token : ""
-            }
-            await api.post("/users", data)
+            // show toast success
+            Toast.success("Register success. Please check your email to verify your account.")
 
-            // @save token to local storage
-            localStorage.setItem("token", data.token)
-
-            // @get data user
-            const response2 = await api.get("/users" + `?token=${data.token}`)
-
-            return response2.data[0]
+            return data?.data
         } catch (error) {
-            console.error(error)
-            return rejectWithValue(error.response.data)
+            // console.error(error.response ? error.response.data : error)
+            return rejectWithValue(error.response ? error.response.data : error)
         }
     }
 )
@@ -89,8 +71,22 @@ export const logout = createAsyncThunk(
 
             return {}
         } catch (error) {
-            console.error(error)
-            return rejectWithValue(error.response.data)
+            // console.error(error.response ? error.response.data : error)
+            return rejectWithValue(error.response ? error.response.data : error)
+        }
+    }
+)
+
+export const verifyAccount = createAsyncThunk(
+    "auth/verifyAccount",
+    async (payload, { rejectWithValue }) => {
+        try {
+            await api.patch("/auth/verify")
+
+            Toast.success("Verify account success.")
+            return
+        } catch (error) {
+            return rejectWithValue(error.response ? error.response.data : error)
         }
     }
 )
@@ -104,9 +100,9 @@ export const updateImageProfile = createAsyncThunk(
             Toast.success("Update image profile success.")
             return data?.imgProfile
         } catch (error) {
-            console.error(error)
-            Toast.error("Error : something went wrong.")
-            return rejectWithValue(error.response.data)
+            // console.error(error)
+            // Toast.error("Error : something went wrong.")
+            return rejectWithValue(error.response ? error.response.data : error)
         }
     }
 )

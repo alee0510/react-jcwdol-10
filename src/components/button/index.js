@@ -1,3 +1,4 @@
+import React from "react"
 // import React from "react"
 import  "./style.css"
 
@@ -32,15 +33,16 @@ import  "./style.css"
 //     )
 // }
 
-
-export default function Button ({
-    title,
-    variant = "primary", // primary, secondary, success, and danger.
-    onButtonClick
-}) {
-    return (
-        <button className={`btn btn-${variant}`} onClick={onButtonClick}>
-            { title }
-        </button>
-    )
-}
+export default React.memo(
+    function Button ({
+        title,
+        variant = "primary", // primary, secondary, success, and danger.
+        onButtonClick
+    }) {
+        return (
+            <button className={`btn btn-${variant}`} onClick={onButtonClick}>
+                { title }
+            </button>
+        )
+    }
+)

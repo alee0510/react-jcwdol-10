@@ -22,3 +22,17 @@ export const getArticles = createAsyncThunk(
         }
     }
 )
+
+export const likeArticle = createAsyncThunk(
+    "blogs/likeArticle",
+    async (payload, { rejectWithValue }) => {
+        try {
+            await api.post("/blog/like", payload)
+
+            Toast.success("Success : like article success.")
+            return 
+        } catch (error) {
+            return rejectWithValue(error.response ? error.response.data : error)
+        }
+    }
+)
